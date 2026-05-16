@@ -1,0 +1,1 @@
+<!doctype html><html><body><h1>{{ $title }}</h1><table width="100%" border="1" cellspacing="0" cellpadding="4"><tr>@foreach($headers as $h)<th>{{ $h }}</th>@endforeach</tr>@foreach($rows as $r)<tr>@foreach($headers as $h)<td>{{ $r[$h]??'' }}</td>@endforeach</tr>@endforeach</table></body></html>

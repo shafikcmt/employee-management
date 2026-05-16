@@ -1,0 +1,1107 @@
+You are a senior Laravel full-stack developer.
+
+Build a simple but complete Employee Management Website using:
+
+- Backend: PHP Laravel
+- Frontend: Blade + Tailwind CSS
+- UI style: shadcn-style clean components, or use Filament/Livewire if it makes the admin panel faster and better
+- Database: MySQL
+- Authentication: Laravel Breeze, Laravel Jetstream, or Laravel built-in auth
+- Role system: Admin, HR/Accounts, Viewer
+
+The system must be based on these two Excel reference files:
+
+1. Advance Sheet workbook
+   - Contains multiple project sheets:
+     - Faena SubContract - Masafat
+     - FAENA - Cairo
+     - Six Senses - Cairo
+     - AMANSAMAR 1 / 2
+     - POLO CLUB
+   - Important columns:
+     - Employee name
+     - Iqama / Passport No
+     - Trade / Designation
+     - Advance amount in SAR
+     - DOJ
+     - Project
+     - Company / subcontractor
+     - Remarks
+   - Use this file to seed employee data, project data, trade/designation data, company/subcontractor data, and advance payment records.
+
+2. February 2026 Timesheet workbook
+   - Project: WADI SAFAR
+   - Month: February 2026
+   - Important columns:
+     - Employee name
+     - Iqama No
+     - Designation
+     - Shift
+     - Accommodation
+     - Daily attendance from day 1 to day 28
+     - Total hours
+     - Days worked
+     - Absent days
+     - Remarks
+   - Attendance values:
+     - Number = worked hours for that day
+     - A = Absent
+     - Fri = Friday/off day
+     - PH = Public holiday
+     - NW = Not working
+     - Empty = no entry
+   - Use this file to seed employees, attendance records, monthly timesheet, total hours, worked days, absent days, and attendance status.
+
+Important comparison requirement:
+
+- Compare both Excel files.
+- Match employees mainly by Iqama / Passport number.
+- If Iqama is missing or different, also support matching by employee name.
+- Some employees appear in both files.
+- Some employees appear only in the advance sheet.
+- Some employees appear only in the timesheet.
+- Do not duplicate employees.
+- Use iqama_no as the main unique identifier when available.
+- If the same employee exists in both files, merge the data into one employee profile.
+- Normalize employee names by trimming spaces and converting to uppercase.
+- Store original Excel sheet/source name for traceability.
+
+Main modules required:
+
+1. Dashboard
+
+Create a clean dashboard showing:
+
+- Total employees
+- Active employees
+- Total present today / selected date
+- Total absent today / selected date
+- Total monthly hours
+- Total advance paid
+- Total extra duty amount
+- Total payable salary estimate
+- Recent advances
+- Recent attendance updates
+- Recent payslips generated
+- Quick action buttons:
+  - Generate Monthly Attendance Report
+  - Generate Absent Report
+  - Generate Payslips
+  - Generate All Reports
+  - Export All Data
+
+2. Employee Management
+
+Features:
+
+- Add employee
+- Edit employee
+- Delete employee
+- View employee details
+- Search employees
+- Filter by project, company, designation, accommodation, and status
+
+Employee fields:
+
+- employee_code
+- name
+- iqama_no / passport_no
+- designation / trade
+- company
+- project
+- shift
+- accommodation
+- DOJ
+- phone optional
+- status active/inactive
+- remarks
+
+Employee detail page should show:
+
+- Basic employee information
+- Current project
+- Attendance summary
+- Absent summary
+- Advance payment history
+- Extra duty history
+- Payslip history
+
+3. Company / Subcontractor Management
+
+Features:
+
+- Add company/subcontractor
+- Edit company/subcontractor
+- Assign employees to company
+- Company-wise employee report
+- Company-wise salary report
+- Company-wise advance report
+
+4. Project Management
+
+Features:
+
+- Add projects such as:
+  - Faena Hotel
+  - Six Senses
+  - Amansamar
+  - Polo Club
+  - WADI SAFAR
+- Assign employees to projects
+- Track current project and previous project history
+- Filter reports by project
+
+5. Designation / Trade Management
+
+Features:
+
+- Add designations/trades
+- Assign designation to employees
+- Filter employee and attendance reports by designation
+- Designation-wise salary report
+
+6. Attendance Management
+
+Create a monthly attendance sheet view like Excel.
+
+Features:
+
+- Select month and year
+- Select project
+- Show employees in rows
+- Show days of selected month in columns
+- Allow attendance entry:
+  - working hours
+  - A
+  - Fri
+  - PH
+  - NW
+  - empty
+- Auto calculate:
+  - total hours
+  - days worked
+  - absent days
+  - extra duty hours
+- Filters:
+  - month
+  - project
+  - employee
+  - designation
+  - company
+  - accommodation
+- Export attendance report to Excel/PDF
+
+Attendance rules:
+
+- Numeric value means present with worked hours.
+- A means absent.
+- Fri means Friday/off day.
+- PH means public holiday.
+- NW means not working.
+- Empty means no entry.
+- Store original value in raw_value.
+- Allow admin to manually edit attendance records.
+
+7. Absent Report
+
+Features:
+
+- Show absent employees by date
+- Show absent employees by month
+- Count absent days per employee
+- Filter by:
+  - project
+  - company
+  - designation
+  - accommodation
+  - month
+  - year
+- Export absent report to PDF/Excel
+- Print absent report
+
+8. Advance Payment Module
+
+Features:
+
+- Add advance payment for employee
+- Edit advance payment
+- Delete advance payment
+- Show advance history
+- Show total advance by employee
+- Show total advance by month
+- Show total advance by project
+- Deduct advance from payslip
+
+Advance payment fields:
+
+- employee_id
+- project_id
+- amount
+- payment_date
+- payment_type weekly/monthly/manual
+- source_sheet
+- remarks
+
+9. Extra Duty / Friday Duty / Public Holiday Duty Module
+
+Add an Extra Duty option for employees who work on Friday, public holiday, or other off days.
+
+Attendance rules:
+
+- Normal working day with numeric hours = regular duty
+- Fri = Friday/off day
+- PH = public holiday
+- NW = not working
+- A = absent
+- If an employee works on Friday, public holiday, or off day, allow marking it as Extra Duty
+
+Extra duty entry fields:
+
+- employee_id
+- project_id
+- duty_date
+- day_type: friday / public_holiday / off_day / normal_day
+- hours_worked
+- extra_duty_rate
+- amount
+- remarks
+- approved_by
+- approval_status: pending / approved / rejected
+- source_sheet nullable
+
+Attendance sheet behavior:
+
+- If the day is Friday but employee worked, allow entering hours instead of only "Fri".
+- Show badge like "Extra Duty" or "Friday Duty".
+- Store this as present + extra_duty = true.
+- Keep original raw value from Excel.
+- Allow manual update from the monthly attendance sheet.
+- Admin can review and approve extra duty before it appears in payslip.
+
+Payslip behavior for extra duty:
+
+- Extra duty hours should be calculated separately from normal hours.
+- Payslip should show:
+  - normal working hours
+  - normal salary
+  - extra duty hours
+  - extra duty amount
+  - gross salary = normal salary + approved extra duty amount
+  - advance deduction
+  - net payable
+- Admin can set different rates for:
+  - normal duty
+  - Friday duty
+  - public holiday duty
+  - overtime duty
+
+Extra duty reports:
+
+- Extra duty report by employee
+- Extra duty report by project
+- Extra duty report by month
+- Friday duty report
+- Public holiday duty report
+- Total extra duty amount report
+- Export extra duty report to PDF/Excel
+
+Import rules for extra duty:
+
+- If attendance cell contains numeric hours on a Friday column, mark it as extra duty / Friday duty.
+- If attendance cell contains hours on PH day, mark it as public holiday duty.
+- Store extra duty records automatically during import.
+- Admin can review and approve before including in payslip.
+
+10. Payslip Generation
+
+Features:
+
+- Generate monthly payslip per employee
+- Generate payslips project-wise
+- Generate payslips for all employees in selected project/month
+- Download individual payslip PDF
+- Download all payslips combined PDF
+- Download ZIP file with all payslips
+- Download salary summary Excel
+
+Payslip fields:
+
+- employee name
+- iqama no
+- designation
+- project
+- month
+- year
+- total normal hours
+- days worked
+- absent days
+- extra duty hours
+- hourly rate / monthly salary
+- normal salary
+- extra duty amount
+- gross salary
+- advance deduction
+- net payable
+- generated by
+- generated date
+- status draft/final
+
+Payslip calculation:
+
+- normal salary = normal working hours × hourly rate
+- extra duty amount = approved extra duty hours × extra duty rate
+- gross salary = normal salary + approved extra duty amount
+- net payable = gross salary - advance deduction
+
+Admin options:
+
+- Set hourly rate per employee
+- Set monthly salary per employee
+- Set extra duty rate
+- Regenerate draft payslip
+- Finalize payslip
+- Prevent duplicate finalized payslip for same employee/month unless admin allows regeneration
+
+11. One-Click Report Generation
+
+Add a one-click report generation system so office staff can quickly generate all required reports without manually opening each module.
+
+Create a "Generate Reports" page with buttons/cards for:
+
+- Employee List Report
+- Daily Attendance Report
+- Monthly Attendance Report
+- Absent Report
+- Advance Payment Report
+- Extra Duty / Friday Duty Report
+- Public Holiday Duty Report
+- Payslip Report
+- Salary Summary Report
+- Project-wise Employee Report
+- Project-wise Attendance Report
+- Project-wise Salary Report
+- Accommodation-wise Report
+- Designation/Trade-wise Report
+- Company/Subcontractor-wise Report
+
+Each report should have:
+
+- Generate button
+- Preview button
+- Download PDF button
+- Export Excel button
+- Print button
+
+Report filters:
+
+- Month
+- Year
+- Date range
+- Project
+- Employee
+- Company
+- Designation / Trade
+- Accommodation
+- Attendance status
+- Payment status
+
+One-click all reports option:
+
+- Add a button: "Generate All Reports"
+- When clicked, generate all important reports for the selected month/project.
+- Create a ZIP file containing:
+  - Employee list PDF/Excel
+  - Attendance report PDF/Excel
+  - Absent report PDF/Excel
+  - Advance payment report PDF/Excel
+  - Extra duty report PDF/Excel
+  - Payslip summary PDF/Excel
+  - Individual payslip PDFs
+  - Salary summary PDF/Excel
+
+Payslip report behavior:
+
+- Admin can select month, year, and project.
+- Click "Generate Payslips".
+- System should generate payslips for all employees in that project/month.
+- Admin can download:
+  - Individual employee payslip PDF
+  - All payslips combined PDF
+  - Salary summary Excel
+  - ZIP file with all payslips
+
+Report permissions:
+
+- Admin can generate all reports.
+- HR/Accounts can generate attendance, advance, payslip, salary, and extra duty reports.
+- Viewer can only preview and download allowed reports.
+
+Technical report requirements:
+
+- Use Laravel Queues for large report generation if needed.
+- Use DomPDF or Snappy PDF for PDF generation.
+- Use Maatwebsite Excel for Excel export.
+- Use ZipArchive for downloading all reports as ZIP.
+- Store generated reports in storage/app/reports.
+- Save report history in database.
+
+The reporting system should be very simple:
+
+- Select month/project
+- Click generate
+- Preview, print, download PDF, export Excel, or download ZIP
+
+12. Import Excel Page
+
+Create an import page in the admin panel.
+
+Features:
+
+- Upload Advance Sheet Excel
+- Upload Timesheet Excel
+- Select project/month/year before import
+- Preview detected employees before importing
+- Show matched employees
+- Show new employees
+- Show duplicate warnings
+- Show invalid rows
+- Confirm import
+- Store import history
+
+Also create a Laravel command:
+
+php artisan import:employee-excel
+
+The command should read both Excel files and seed:
+
+- employees
+- companies
+- projects
+- designations
+- attendance records
+- advance payments
+- extra duty records
+
+Use Maatwebsite Excel or PhpSpreadsheet.
+
+Import rules:
+
+- Use iqama_no to prevent duplicate employees.
+- If iqama_no is missing, fallback to normalized employee name.
+- Normalize names to uppercase/trimmed format.
+- Convert Excel date numbers to proper dates.
+- Convert attendance values:
+  - numeric value to present with hours
+  - A to absent
+  - Fri to friday
+  - PH to public_holiday
+  - NW to not_working
+  - blank to empty
+- Store original Excel value in raw_value.
+- Store source sheet name for traceability.
+- If a numeric value appears on Friday/public holiday/off day, create extra duty record.
+- Do not overwrite existing manually edited data unless admin confirms.
+
+13. Reports Required
+
+Create the following reports:
+
+Employee Reports:
+
+- All employee list
+- Active employee list
+- Inactive employee list
+- Project-wise employees
+- Company-wise employees
+- Designation-wise employees
+- Accommodation-wise employees
+
+Attendance Reports:
+
+- Daily attendance report
+- Monthly attendance report
+- Employee attendance history
+- Project-wise attendance report
+- Attendance summary report
+
+Absent Reports:
+
+- Daily absent report
+- Monthly absent report
+- Employee-wise absent count
+- Project-wise absent report
+
+Advance Reports:
+
+- Employee-wise advance report
+- Project-wise advance report
+- Monthly advance report
+- Total advance summary
+
+Extra Duty Reports:
+
+- Employee-wise extra duty report
+- Friday duty report
+- Public holiday duty report
+- Project-wise extra duty report
+- Monthly extra duty amount report
+
+Salary / Payslip Reports:
+
+- Individual payslip
+- Monthly payslip summary
+- Project-wise salary report
+- Company-wise salary report
+- Salary payable report
+- Advance deduction report
+- Net payable report
+
+14. Database Design
+
+Create migrations, models, relationships, factories/seeders for:
+
+- users
+- roles / permissions
+- employees
+- companies
+- projects
+- designations
+- employee_project_assignments
+- attendance_months
+- attendance_records
+- advance_payments
+- extra_duties
+- payslips
+- payslip_items optional
+- generated_reports
+- imports optional
+- import_rows optional
+
+Suggested table structure:
+
+users:
+
+- id
+- name
+- email
+- password
+- role
+- timestamps
+
+companies:
+
+- id
+- name
+- type nullable
+- remarks nullable
+- timestamps
+
+projects:
+
+- id
+- name
+- code nullable
+- location nullable
+- status active/inactive
+- remarks nullable
+- timestamps
+
+designations:
+
+- id
+- name
+- remarks nullable
+- timestamps
+
+employees:
+
+- id
+- employee_code
+- name
+- iqama_no unique nullable
+- passport_no nullable
+- designation_id nullable
+- company_id nullable
+- current_project_id nullable
+- shift nullable
+- accommodation nullable
+- doj nullable
+- phone nullable
+- hourly_rate nullable
+- monthly_salary nullable
+- status active/inactive
+- remarks nullable
+- source_sheet nullable
+- timestamps
+
+employee_project_assignments:
+
+- id
+- employee_id
+- project_id
+- start_date nullable
+- end_date nullable
+- status active/inactive
+- remarks nullable
+- timestamps
+
+attendance_months:
+
+- id
+- project_id
+- month
+- year
+- source_file nullable
+- source_sheet nullable
+- imported_by nullable
+- imported_at nullable
+- timestamps
+
+attendance_records:
+
+- id
+- employee_id
+- project_id
+- attendance_date
+- month
+- year
+- status: present/absent/friday/public_holiday/not_working/empty
+- hours decimal nullable
+- raw_value nullable
+- is_extra_duty boolean default false
+- extra_duty_type nullable
+- extra_duty_hours nullable
+- extra_duty_amount nullable
+- remarks nullable
+- source_sheet nullable
+- timestamps
+
+advance_payments:
+
+- id
+- employee_id
+- project_id nullable
+- amount decimal
+- payment_date
+- payment_type weekly/monthly/manual
+- source_sheet nullable
+- remarks nullable
+- timestamps
+
+extra_duties:
+
+- id
+- employee_id
+- project_id
+- duty_date
+- day_type: friday/public_holiday/off_day/normal_day
+- hours_worked decimal
+- rate decimal
+- amount decimal
+- approval_status pending/approved/rejected
+- approved_by nullable
+- approved_at nullable
+- remarks nullable
+- source_sheet nullable
+- timestamps
+
+payslips:
+
+- id
+- employee_id
+- project_id
+- month
+- year
+- total_hours
+- normal_hours
+- extra_duty_hours
+- days_worked
+- absent_days
+- hourly_rate nullable
+- monthly_salary nullable
+- normal_salary
+- extra_duty_amount
+- gross_salary
+- advance_deduction
+- net_salary
+- generated_by
+- generated_at
+- status draft/final
+- timestamps
+
+generated_reports:
+
+- id
+- report_type
+- report_name
+- project_id nullable
+- employee_id nullable
+- month nullable
+- year nullable
+- filters json nullable
+- file_type: pdf/excel/zip
+- file_path
+- generated_by
+- generated_at
+- status: processing/completed/failed
+- timestamps
+
+imports:
+
+- id
+- import_type: advance/timesheet/both
+- file_name
+- project_id nullable
+- month nullable
+- year nullable
+- imported_by
+- total_rows
+- success_rows
+- failed_rows
+- status
+- remarks nullable
+- timestamps
+
+15. Models and Relationships
+
+Create Laravel models with relationships:
+
+Employee:
+
+- belongsTo Company
+- belongsTo Designation
+- belongsTo current Project
+- hasMany AttendanceRecords
+- hasMany AdvancePayments
+- hasMany ExtraDuties
+- hasMany Payslips
+- hasMany ProjectAssignments
+
+Project:
+
+- hasMany Employees
+- hasMany AttendanceRecords
+- hasMany AdvancePayments
+- hasMany ExtraDuties
+- hasMany Payslips
+
+Company:
+
+- hasMany Employees
+
+Designation:
+
+- hasMany Employees
+
+AttendanceRecord:
+
+- belongsTo Employee
+- belongsTo Project
+
+AdvancePayment:
+
+- belongsTo Employee
+- belongsTo Project
+
+ExtraDuty:
+
+- belongsTo Employee
+- belongsTo Project
+- belongsTo approvedBy User
+
+Payslip:
+
+- belongsTo Employee
+- belongsTo Project
+- belongsTo generatedBy User
+
+16. UI Pages Required
+
+Create these pages:
+
+Authentication:
+
+- Login
+- Logout
+- Forgot password optional
+
+Dashboard:
+
+- Summary cards
+- Charts optional
+- Recent activity
+- Quick report buttons
+
+Employees:
+
+- Employee list
+- Employee create
+- Employee edit
+- Employee details
+- Employee import preview
+
+Projects:
+
+- Project list
+- Project create/edit
+- Project employee assignment
+
+Companies:
+
+- Company list
+- Company create/edit
+
+Designations:
+
+- Designation list
+- Designation create/edit
+
+Attendance:
+
+- Monthly attendance sheet
+- Daily attendance view
+- Attendance edit page
+- Attendance import page
+
+Absent:
+
+- Daily absent report
+- Monthly absent report
+
+Advance Payments:
+
+- Advance list
+- Add advance
+- Edit advance
+- Employee advance history
+
+Extra Duty:
+
+- Extra duty list
+- Add extra duty
+- Approve/reject extra duty
+- Friday duty report
+- Public holiday duty report
+
+Payslips:
+
+- Generate payslip
+- Payslip list
+- Payslip detail
+- Print payslip
+- Download PDF
+- Batch generate payslips
+
+Reports:
+
+- Report dashboard
+- One-click report generation
+- Report preview
+- Generated report history
+- Download PDF/Excel/ZIP
+
+Settings:
+
+- Salary settings
+- Extra duty rate settings
+- User management
+- Role permissions
+
+17. UI / Design Requirements
+
+Use a clean admin dashboard design.
+
+Design requirements:
+
+- Tailwind CSS
+- shadcn-style cards, buttons, badges, tables, modals
+- Responsive layout
+- Sidebar navigation
+- Top navbar
+- Searchable tables
+- Pagination
+- Filters
+- Status badges
+- Confirmation modals
+- Toast notifications
+- Professional colors
+- Simple layout for non-technical office staff
+
+Sidebar menu:
+
+- Dashboard
+- Employees
+- Projects
+- Companies
+- Designations
+- Attendance
+- Absent Report
+- Advance Payments
+- Extra Duty
+- Payslips
+- Reports
+- Imports
+- Settings
+
+18. Validation Rules
+
+Employee validation:
+
+- Employee name required
+- Iqama/passport should be unique if provided
+- Status required
+
+Attendance validation:
+
+- Attendance date required
+- Employee required
+- Project required
+- Hours must be numeric when status is present
+- Status must be one of present, absent, friday, public_holiday, not_working, empty
+
+Advance validation:
+
+- Employee required
+- Amount must be positive
+- Payment date required
+
+Extra duty validation:
+
+- Employee required
+- Project required
+- Duty date required
+- Hours worked must be numeric and positive
+- Rate must be numeric and positive
+- Approval status must be valid
+
+Payslip validation:
+
+- Employee required
+- Month/year required
+- Payslip cannot be finalized twice for same employee/month unless regenerated by admin
+- Only approved extra duty should be included in final payslip
+
+Report validation:
+
+- Report type required
+- Month/year required where applicable
+- Project optional
+- Employee optional
+
+19. Permissions
+
+Admin:
+
+- Full access
+- Manage users
+- Import Excel
+- Generate all reports
+- Finalize payslips
+- Approve extra duty
+- Delete records
+
+HR/Accounts:
+
+- Manage employees
+- Manage attendance
+- Manage advance payments
+- Generate payslips
+- Generate attendance, advance, salary, and extra duty reports
+- Cannot delete finalized payslips unless allowed
+
+Viewer:
+
+- View dashboard
+- View employees
+- View reports
+- Download allowed reports
+- Cannot edit/delete/import
+
+20. Technical Requirements
+
+Use:
+
+- Laravel latest stable version
+- PHP 8.2+
+- MySQL
+- Tailwind CSS
+- Alpine.js optional
+- Livewire optional
+- Filament optional if it makes admin faster
+- Maatwebsite Excel for Excel import/export
+- DomPDF or Snappy for PDF generation
+- ZipArchive for ZIP downloads
+- Laravel Queues for heavy report generation
+- Laravel Storage for generated files
+
+Code quality:
+
+- Use service classes for business logic
+- Use FormRequest validation
+- Use policies/middleware for permissions
+- Use database transactions during imports
+- Use reusable Blade components
+- Use clean routes and controllers
+- Use seeders for demo data
+- Write README setup guide
+
+Suggested service classes:
+
+- EmployeeImportService
+- AttendanceImportService
+- AdvanceImportService
+- ExtraDutyService
+- PayslipService
+- ReportGenerationService
+- ExcelExportService
+- PdfExportService
+
+21. Deliverables
+
+Provide full Laravel project code including:
+
+- Migrations
+- Models
+- Controllers
+- Requests
+- Services
+- Blade/Livewire/Filament pages
+- Routes
+- Seeders
+- Import command
+- Excel import logic
+- PDF payslip generation
+- Excel/PDF report export
+- ZIP report download
+- README file
+
+README must include setup steps:
+
+- composer install
+- npm install
+- copy .env.example .env
+- configure database
+- php artisan key:generate
+- php artisan migrate --seed
+- php artisan storage:link
+- php artisan import:employee-excel
+- npm run dev
+- php artisan serve
+
+22. Main Feature Priority
+
+First version must prioritize:
+
+1. Employee details
+2. Excel import and seed from both reference sheets
+3. Attendance management
+4. Absent report
+5. Advance payment
+6. Extra duty / Friday duty / public holiday duty
+7. Payslip generation
+8. One-click report generation
+9. PDF/Excel/ZIP export
+
+Make the system easy, practical, and office-staff friendly.
+Do not overcomplicate the first version.
+Build required features first, then optional charts/settings.

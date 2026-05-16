@@ -1,0 +1,1 @@
+@extends('layouts.app')@section('title','Payslip')@section('content')<div class="card">@include('payslips.card')<a class="btn-primary" href="{{ route('payslips.pdf',$payslip) }}">PDF</a></div>@endsection

@@ -1,0 +1,1 @@
+@extends('layouts.app')@section('title',$employee->name)@section('content')<div class="card"><p>Iqama: {{ $employee->iqama_no }}</p><p>Designation: {{ $employee->designation?->name }}</p><p>Project: {{ $employee->currentProject?->name }}</p><a href="{{ route('employees.edit',$employee) }}" class="btn-primary">Edit</a></div>@endsection

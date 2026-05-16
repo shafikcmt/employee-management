@@ -1,0 +1,1 @@
+@extends('layouts.app')@section('title','Save')@section('content')<form class="card" method="post" action="{{ $item->exists?route($route.'.update',$item):route($route.'.store') }}">@csrf @if($item->exists)@method('put')@endif<input class="input" name="name" value="{{ $item->name }}"><button class="btn-primary">Save</button></form>@endsection

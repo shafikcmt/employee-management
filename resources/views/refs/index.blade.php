@@ -1,0 +1,1 @@
+@extends('layouts.app')@section('title',$title)@section('content')<a class="btn-primary" href="{{ route($route.'.create') }}">Add</a><div class="card mt-4"><table class="w-full">@foreach($items as $i)<tr><td class="table-td">{{ $i->name }}</td><td class="table-td"><a href="{{ route($route.'.edit',$i) }}">Edit</a></td></tr>@endforeach</table>{{ $items->links() }}</div>@endsection
