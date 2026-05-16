@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title','Monthly Attendance Sheet'); ?>
 <?php $__env->startSection('content'); ?>
 <div class="mb-4 grid gap-3 md:grid-cols-2">
@@ -78,4 +79,4 @@
 </div>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-management-laravel\resources\views/attendance/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-management\resources\views/attendance/index.blade.php ENDPATH**/ ?>

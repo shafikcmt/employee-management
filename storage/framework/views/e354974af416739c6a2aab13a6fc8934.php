@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Employee Management') }} - @yield('title')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title><?php echo e(config('app.name', 'Employee Management')); ?> - <?php echo $__env->yieldContent('title'); ?></title>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <style>
         :root {
             --teal: #0f766e;
@@ -56,7 +56,7 @@
 
         <!-- Quick Action Button -->
         <div class="p-4 border-b border-slate-200">
-            <a href="{{ route('attendance.take') }}" 
+            <a href="<?php echo e(route('attendance.take')); ?>" 
                class="w-full block text-center bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md hover:shadow-lg">
                 📋 Take Attendance
             </a>
@@ -64,7 +64,7 @@
 
         <!-- Navigation -->
         <nav class="p-4 space-y-1 sidebar-nav overflow-y-auto max-h-[calc(100vh-240px)]">
-            @php
+            <?php
                 $menu = [
                     ['Dashboard', 'dashboard', 'dashboard'],
                     ['Employees', 'employees.index', 'people'],
@@ -78,25 +78,26 @@
                     ['Imports', 'imports.index', 'upload'],
                     ['Refs', '#', 'settings', ['Companies', 'companies.index', 'Designations', 'designations.index']],
                 ];
-            @endphp
+            ?>
 
-            @foreach($menu as $item)
-                @if(count($item) === 3)
-                    <a href="{{ route($item[1]) }}" 
-                       class="{{ request()->routeIs($item[1]) ? 'active' : '' }}">
-                        {{ $item[0] }}
+            <?php $__currentLoopData = $menu; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if(count($item) === 3): ?>
+                    <a href="<?php echo e(route($item[1])); ?>" 
+                       class="<?php echo e(request()->routeIs($item[1]) ? 'active' : ''); ?>">
+                        <?php echo e($item[0]); ?>
+
                     </a>
-                @endif
-            @endforeach
+                <?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </nav>
 
         <!-- User Section -->
         <div class="absolute bottom-0 left-0 w-full md:w-72 p-4 bg-slate-50 border-t border-slate-200">
-            <form method="post" action="{{ route('logout') }}" class="w-full">
-                @csrf
+            <form method="post" action="<?php echo e(route('logout')); ?>" class="w-full">
+                <?php echo csrf_field(); ?>
                 <button type="submit" 
                         class="w-full inline-flex items-center justify-between px-4 py-2.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 font-semibold text-sm transition-all">
-                    <span>{{ auth()->user()->name ?? 'User' }}</span>
+                    <span><?php echo e(auth()->user()->name ?? 'User'); ?></span>
                     <span>Logout</span>
                 </button>
             </form>
@@ -108,40 +109,45 @@
         <!-- Top Bar -->
         <div class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
             <div class="px-6 py-4 flex items-center justify-between">
-                <h1 class="page-title">@yield('title')</h1>
+                <h1 class="page-title"><?php echo $__env->yieldContent('title'); ?></h1>
                 <div class="text-sm text-slate-600">
-                    {{ now()->format('l, d M Y') }}
+                    <?php echo e(now()->format('l, d M Y')); ?>
+
                 </div>
             </div>
         </div>
 
         <!-- Alerts -->
         <div class="px-6 pt-4">
-            @if(session('success'))
+            <?php if(session('success')): ?>
                 <div class="toast toast-success mb-4">
-                    <strong>✓ Success!</strong> {{ session('success') }}
-                </div>
-            @endif
+                    <strong>✓ Success!</strong> <?php echo e(session('success')); ?>
 
-            @if(session('error'))
-                <div class="toast toast-error mb-4">
-                    <strong>✗ Error!</strong> {{ session('error') }}
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @if($errors->any())
+            <?php if(session('error')): ?>
                 <div class="toast toast-error mb-4">
-                    <strong>✗ Error!</strong> {{ $errors->first() }}
+                    <strong>✗ Error!</strong> <?php echo e(session('error')); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
+
+            <?php if($errors->any()): ?>
+                <div class="toast toast-error mb-4">
+                    <strong>✗ Error!</strong> <?php echo e($errors->first()); ?>
+
+                </div>
+            <?php endif; ?>
         </div>
 
         <!-- Page Content -->
         <div class="px-6 py-6">
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </div>
     </main>
 </div>
 
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\employee-management\resources\views/layouts/app.blade.php ENDPATH**/ ?>

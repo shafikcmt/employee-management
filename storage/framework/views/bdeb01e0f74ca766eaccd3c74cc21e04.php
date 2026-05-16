@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title','Take Attendance'); ?>
 <?php $__env->startSection('content'); ?>
 <style>
@@ -419,4 +420,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-management-laravel\resources\views/attendance/take.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-management\resources\views/attendance/take.blade.php ENDPATH**/ ?>
