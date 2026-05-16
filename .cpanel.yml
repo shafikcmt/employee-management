@@ -1,0 +1,13 @@
+---
+deployment:
+  tasks:
+    - export REPOPATH=/home/heavyzih/repositories/employee-management
+    - export DEPLOYPATH=/home/heavyzih/employee
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/rsync -av --delete --exclude='.git' --exclude='.env' $REPOPATH/ $DEPLOYPATH/
+    - cd $DEPLOYPATH
+    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
+    - /usr/local/bin/php artisan migrate --force
+    - /usr/local/bin/php artisan storage:link
+    - /usr/local/bin/php artisan optimize:clear
+    - /usr/local/bin/php artisan optimize
