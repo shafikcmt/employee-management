@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'office/employee-management',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '4fc45865bdd963a38f3f34d0b79d9846b773bc00',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -665,9 +665,9 @@
             'dev_requirement' => false,
         ),
         'office/employee-management' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '4fc45865bdd963a38f3f34d0b79d9846b773bc00',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

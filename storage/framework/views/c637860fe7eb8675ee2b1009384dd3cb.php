@@ -1,0 +1,3 @@
+<?php $__env->startSection('title',$employee->name); ?><?php $__env->startSection('content'); ?><div class="card"><p>Iqama: <?php echo e($employee->iqama_no); ?></p><p>Designation: <?php echo e($employee->designation?->name); ?></p><p>Project: <?php echo e($employee->currentProject?->name); ?></p><a href="<?php echo e(route('employees.edit',$employee)); ?>" class="btn-primary">Edit</a></div><?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\employee-management-laravel\resources\views/employees/show.blade.php ENDPATH**/ ?>
